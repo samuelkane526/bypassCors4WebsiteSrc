@@ -1,9 +1,6 @@
-// @ts-ignore:next-line
 import { serve } from "https://deno.land/std@0.114.0/http/server.ts";
-// @ts-ignore:next-line
-import puppeteer from "https://deno.land/x/puppeteer@14.1.1/mod.ts";
 
-const handler = async (req) => {
+const handler = async (req: Request): Promise<Response> => {
   const url = new URL(req.url);
   const targetUrl = url.searchParams.get("url");
 
@@ -30,13 +27,12 @@ const handler = async (req) => {
   }
 
   try {
-    const browser = await puppeteer.launch({
-      executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
+    const response = await fetch(`https://api.scrapingant.com/v1/general?url=${encodeURIComponent(targetUrl)}`, {
+      headers: {
+        "x-api-key": "YOUR_API_KEY",
+      },
     });
-    const page = await browser.newPage();
-    await page.goto(targetUrl, { waitUntil: 'networkidle2' });
-    const content = await page.content();
-    await browser.close();
+    const content = await response.text();
 
     return new Response(content, {
       headers: {
@@ -59,5 +55,5 @@ const handler = async (req) => {
   }
 };
 
-console.log("Server running on http://localhost:8000");
-await serve(handler, { port: 8000 });
+console.log("Server running...");
+await serve(handler);
