@@ -4,7 +4,6 @@ const handler = async (req: Request): Promise<Response> => {
   const url = new URL(req.url);
   const targetUrl = url.searchParams.get("url");
 
-  // Handle preflight requests
   if (req.method === "OPTIONS") {
     return new Response(null, {
       headers: {
@@ -29,7 +28,7 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     const response = await fetch(`https://api.scrapingant.com/v1/general?url=${encodeURIComponent(targetUrl)}`, {
       headers: {
-        "x-api-key": "YOUR_API_KEY",
+        "x-api-key": "858a721fda3f4e6594e5c51ef68ae115",
       },
     });
     const content = await response.text();
